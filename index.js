@@ -57,6 +57,25 @@ async function run() {
             res.send(result);
         });
 
+        app.put("/tasks/:id", async (req, res) => {
+            const data = req.body;
+            // console.log("updated info", data);
+
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const updateDoc = {
+                $set: {
+                    taskDetails: data.taskDetails,
+                    taskDate: data.taskDate
+                },
+            };
+            const options = { upsert: true };
+
+            const result = await taskCollection.updateOne(filter, updateDoc, options);
+            res.send(result);
+        });
+
+
         app.delete('/tasks/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
